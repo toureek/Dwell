@@ -9,6 +9,8 @@ import com.dwell.it.utils.FileInputOutputUtils;
 import com.dwell.it.utils.database.DatabaseStorageUtils;
 import com.dwell.it.utils.geo.AMapApiGeoUtils;
 import com.dwell.it.webspider.CrawlerConfigHelper;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,5 +98,31 @@ public class CrawlerController {
             return HttpJSONResponse.ok("Excel可视化数据导出成功");
         }
         return HttpJSONResponse.errorMessage("Excel可视化数据导出时出现异常 详情请查询错误日志");
+    }
+
+
+    /**
+     * Using seleniumhq for caching images from cdn-server to local web-browser
+     *
+     * @return Json-Response
+     */
+    @RequestMapping(value = "/images", method = RequestMethod.GET)
+    public HttpJSONResponse cachingImageLinkOnWebBrowserFromCDN() {
+        List<House> houseList = iHouseService.queryQualifiedAddressHouseListWithinGeoInfo();
+        System.out.println(houseList.size() + "items");
+        for (House house : houseList) {
+            WebDriver webDriver = new ChromeDriver();
+            String requestUrl = house.getMainImageUrl();
+            try {
+                System.out.println(requestUrl);
+                webDriver.get(requestUrl);
+                Thread.sleep(5000); // Workaround step for caching images in local web-browser
+            } catch (Exception ex) {
+                // do nothing...
+            } finally {
+                webDriver.quit();
+            }
+        }
+        return HttpJSONResponse.ok("CDN依赖的图片 已缓存到浏览器");
     }
 }

@@ -238,7 +238,7 @@ public class HouseServiceImpl implements IHouseService {
     }
 
 
-    /**
+    /**queryHousesByPaging
      * 查询符合App API条件的房源总数
      *
      * @param whereConditionSql whereSQL

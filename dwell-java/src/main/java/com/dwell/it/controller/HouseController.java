@@ -24,7 +24,7 @@ public class HouseController {
     @Autowired
     private IHouseService iHouseService;
 
-    private final String qualifiedConditionSQL = "where confirm_apartment_type = 2 and LENGTH(city_zone) > 5 and geo_info != '0,0'";
+    private final String qualifiedConditionSQL = "where confirm_apartment_type = 2 and LENGTH(city_zone) > 5 and geo_info != '0,0' order by id desc";
 
     private Jedis jedis = new Jedis("localhost");
 
@@ -36,7 +36,7 @@ public class HouseController {
      * @param pageSize   分页大小
      * @return API-Response
      */
-    @RequestMapping(value = "/houses", method = RequestMethod.GET)
+    @RequestMapping(value = "/houses/list", method = RequestMethod.GET)
     public HttpJSONResponse fetchHouseListBaseOnPageNumber(@RequestParam(value = "pageNumber") Integer pageNumber,
                                                            @RequestParam(value = "pageSize", defaultValue = "20") Integer pageSize)
             throws JsonProcessingException {
