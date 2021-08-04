@@ -13,21 +13,23 @@ repositories {
     jcenter()
 }
 
+apply plugin: 'java'
+
 dependencies {
     //	SpringBoot
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compile('org.springframework.boot:spring-boot-starter-aop')
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
 
     //	JSON-Handler
-    compile("com.google.code.gson:gson:2.8.5")
-    compile("edu.uci.ics:crawler4j:4.4.0")
-    compile("org.jsoup:jsoup:1.11.3")
-    compile("com.sleepycat:je:5.0.73")
-    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.6.0'
+    implementation "com.google.code.gson:gson:2.8.5"
+    implementation "edu.uci.ics:crawler4j:4.4.0"
+    implementation "org.jsoup:jsoup:1.11.3"
+    implementation "com.sleepycat:je:5.0.73"
+    implementation 'org.seleniumhq.selenium:selenium-java:3.6.0'
 
     //	Database
-    compile("com.mchange:c3p0:0.9.5.2")
+    implementation "com.mchange:c3p0:0.9.5.2"
     runtimeOnly 'mysql:mysql-connector-java'
 
     //	Getters / Setters Utils
@@ -41,15 +43,15 @@ dependencies {
 
     //	MyBatis ORM-Framework
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.1'
-    compile("tk.mybatis:mapper-spring-boot-starter:1.2.4")
+    implementation 'tk.mybatis:mapper-spring-boot-starter:1.2.4'
 
     //  MyBatis Paging
-    compile("com.github.pagehelper:pagehelper-spring-boot-starter:1.2.5")
+    implementation 'com.github.pagehelper:pagehelper-spring-boot-starter:1.2.5'
 
     //  Excel
-    compile group: 'org.apache.poi', name: 'poi', version: '4.1.0'
+    implementation 'org.apache.poi:poi:4.1.0'
 
     //  Redis / Jedis for caching
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    compile group: 'redis.clients', name: 'jedis', version: '2.8.0'
+    implementation 'redis.clients:jedis:2.8.0'
 }
