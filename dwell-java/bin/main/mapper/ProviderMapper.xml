@@ -1,0 +1,58 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dwell.it.dao.IProviderDao">
+
+    <resultMap id="providerResultMap" type="com.dwell.it.entities.Provider">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="descriptions" property="descriptions" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Provider_Full_Column_List">
+        id, name, descriptions
+    </sql>
+
+
+    <insert id="insertNewProvider" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id" parameterType="com.dwell.it.entities.Provider">
+        insert into t_providers
+        (name, descriptions)
+        values
+        (#{name}, #{descriptions})
+    </insert>
+
+
+    <select id="fetchSingleProviderById" resultType="com.dwell.it.entities.Provider">
+        select
+        <include refid="Provider_Full_Column_List"/>
+        from t_providers
+        where id = #{id}
+    </select>
+
+    <update id="updateProvider" parameterType="com.dwell.it.entities.Provider">
+        update t_providers
+        <set>
+            <if test="name!=null">name=#{name},</if>
+            <if test="descriptions!=null">descriptions=#{descriptions},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="deleteProviderById">
+        delete from t_providers where id = #{id}
+    </delete>
+
+
+    <!-- Foreign Key Handler Starts -->
+
+    <select id="searchTargetProvider" resultType="com.dwell.it.entities.Provider">
+        select
+        <include refid="Provider_Full_Column_List"/>
+        from t_providers
+        where name = #{name}
+    </select>
+
+    <!-- Foreign Key Handler Starts -->
+
+</mapper>

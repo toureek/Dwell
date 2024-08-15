@@ -1,0 +1,223 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dwell.it.dao.IHouseDao">
+
+    <resultMap id="houseBaseResultMap" type="com.dwell.it.entities.House">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="provider_id" property="providerId" jdbcType="INTEGER"/>
+
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="detail_page_url" property="detailPageUrl" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="VARCHAR"/>
+        <result column="aspect" property="aspect" jdbcType="VARCHAR"/>
+        <result column="living_dining_kitchen_info" property="livingDiningKitchenInfo" jdbcType="VARCHAR"/>
+        <result column="stock_count" property="stockCount" jdbcType="VARCHAR"/>
+        <result column="main_image_url" property="mainImageUrl" jdbcType="VARCHAR"/>
+        <result column="city_zone" property="cityZone" jdbcType="VARCHAR"/>
+        <result column="info_tags" property="infoTags" jdbcType="VARCHAR"/>
+        <result column="last_update_time" property="lastUpdateTime" jdbcType="VARCHAR"/>
+        <result column="trade_price" property="tradePrice" jdbcType="VARCHAR"/>
+        <result column="trade_price_unit" property="tradePriceUnit" jdbcType="VARCHAR"/>
+
+        <result column="geo_info" property="geoInfo" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- https://stackoverflow.com/questions/49328763/mybatis-how-to-map-a-class-property-stored-in-same-table-as-parent-class -->
+    <resultMap id="residenceTypeResultMap" type="com.dwell.it.entities.HouseDetail" extends="houseBaseResultMap">
+        <result column="contact_id" property="contactId" jdbcType="INTEGER"/>
+        <result column="identifier" property="identifier" jdbcType="VARCHAR"/>
+        <result column="banner_image_urls" property="bannerImageUrls" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="confirm_apartment_type" property="confirmApartmentType" jdbcType="VARCHAR"/>
+        <result column="house_description" property="houseDescription" jdbcType="VARCHAR"/>
+
+        <result column="publish_date_time" property="publishDateTime" jdbcType="VARCHAR"/>
+        <result column="rent_house_type" property="rentHouseType" jdbcType="VARCHAR"/>
+
+        <result column="published_date_time" property="publishedDateTime" jdbcType="VARCHAR"/>
+        <result column="rent_lease" property="rentLease" jdbcType="VARCHAR"/>
+        <result column="floor_high" property="floorHigh" jdbcType="VARCHAR"/>
+        <result column="parking_space" property="parkingSpace" jdbcType="VARCHAR"/>
+        <result column="electronic_consume" property="electronicConsume" jdbcType="VARCHAR"/>
+        <result column="move_in_condition" property="moveInCondition" jdbcType="VARCHAR"/>
+        <result column="visiting_condition" property="visitingCondition" jdbcType="VARCHAR"/>
+        <result column="lift_condition" property="liftCondition" jdbcType="VARCHAR"/>
+        <result column="water_consume" property="waterConsume" jdbcType="VARCHAR"/>
+        <result column="gas_consume" property="gasConsume" jdbcType="VARCHAR"/>
+        <result column="heating_consume" property="heatingConsume" jdbcType="VARCHAR"/>
+
+        <result column="tv_supported" property="tvSupported" jdbcType="VARCHAR"/>
+        <result column="refrigerator_supported" property="refrigeratorSupported" jdbcType="VARCHAR"/>
+        <result column="washing_machine_supported" property="washingMachineSupported" jdbcType="VARCHAR"/>
+        <result column="air_condition_supported" property="airConditionSupported" jdbcType="VARCHAR"/>
+        <result column="water_heating_supported" property="waterHeatingSupported" jdbcType="VARCHAR"/>
+        <result column="bed_supported" property="bedSupported" jdbcType="VARCHAR"/>
+        <result column="heating_supported" property="heatingSupported" jdbcType="VARCHAR"/>
+        <result column="wifi_supported" property="wifiSupported" jdbcType="VARCHAR"/>
+        <result column="wardrobe_supported" property="wardrobeSupported" jdbcType="VARCHAR"/>
+        <result column="gas_supported" property="gasSupported" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <sql id="House_ListPage_Column_List">
+        id, provider_id, title, detail_page_url, area, aspect, living_dining_kitchen_info, stock_count, main_image_url,
+        city_zone, info_tags, last_update_time, trade_price, trade_price_unit
+    </sql>
+
+
+    <insert id="insertNewHouseObject" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id" parameterType="com.dwell.it.entities.HouseDetail">
+        insert into t_houses
+        (provider_id, title, detail_page_url, area, aspect, living_dining_kitchen_info, stock_count, main_image_url,
+        city_zone, info_tags, last_update_time, trade_price, trade_price_unit)
+        values
+        (#{providerId}, #{title}, #{detailPageUrl}, #{area}, #{aspect}, #{livingDiningKitchenInfo}, #{stockCount},
+        #{mainImageUrl}, #{cityZone}, #{infoTags}, #{lastUpdateTime}, #{tradePrice}, #{tradePriceUnit})
+    </insert>
+
+
+    <select id="fetchSingleHouseFromListPageById" resultType="com.dwell.it.entities.House">
+        select
+        <include refid="House_ListPage_Column_List"/>
+        from t_houses
+        where id=#{id}
+    </select>
+
+
+    <update id="updateResidenceDetailObject" parameterType="com.dwell.it.entities.HouseDetail">
+        update t_houses
+        <set>
+            <if test="identifier!=null">identifier=#{identifier},</if>
+            <if test="contactId!=null">contact_id=#{contactId},</if>
+            <if test="bannerImageUrls!=null">banner_image_urls=#{bannerImageUrls},</if>
+            <if test="address!=null">address=#{address},</if>
+            <if test="confirmApartmentType!=null">confirm_apartment_type=#{confirmApartmentType},</if>
+            <if test="houseDescription!=null">house_description=#{houseDescription},</if>
+
+            <if test="publishDateTime!=null">publish_date_time=#{publishDateTime},</if>
+            <if test="rentHouseType!=null">rent_house_type=#{rentHouseType},</if>
+
+            <if test="publishedDateTime!=null">published_date_time=#{publishedDateTime},</if>
+            <if test="rentLease!=null">rent_lease=#{rentLease},</if>
+            <if test="floorHigh!=null">floor_high=#{floorHigh},</if>
+            <if test="parkingSpace!=null">parking_space=#{parkingSpace},</if>
+            <if test="electronicConsume!=null">electronic_consume=#{electronicConsume},</if>
+            <if test="moveInCondition!=null">move_in_condition=#{moveInCondition},</if>
+            <if test="visitingCondition!=null">visiting_condition=#{visitingCondition},</if>
+            <if test="liftCondition!=null">lift_condition=#{liftCondition},</if>
+            <if test="waterConsume!=null">water_consume=#{waterConsume},</if>
+            <if test="gasConsume!=null">gas_consume=#{gasConsume},</if>
+            <if test="heatingConsume!=null">heating_consume=#{heatingConsume},</if>
+
+            <if test="tvSupported!=null">tv_supported=#{tvSupported},</if>
+            <if test="refrigeratorSupported!=null">refrigerator_supported=#{refrigeratorSupported},</if>
+            <if test="washingMachineSupported!=null">washing_machine_supported=#{washingMachineSupported},</if>
+            <if test="airConditionSupported!=null">air_condition_supported=#{airConditionSupported},</if>
+            <if test="waterHeatingSupported!=null">water_heating_supported=#{waterHeatingSupported},</if>
+            <if test="bedSupported!=null">bed_supported=#{bedSupported},</if>
+            <if test="heatingSupported!=null">heating_supported=#{heatingSupported},</if>
+            <if test="wifiSupported!=null">wifi_supported=#{wifiSupported},</if>
+            <if test="wardrobeSupported!=null">wardrobe_supported=#{wardrobeSupported},</if>
+            <if test="gasSupported!=null">gas_supported=#{gasSupported},</if>
+
+            <if test="infoTags!=null">info_tags=#{infoTags},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <delete id="deleteHouseObjectById">
+        delete from t_houses where id = #{id}
+    </delete>
+
+
+    <!-- SQLMapper Batch-Operations Starts -->
+
+    <!--MyBatis BatchOperations: ref to http://www.mybatis.org/mybatis-3/sqlmap-xml.html-->
+    <insert id="batchInsertNewHouseList" parameterType="java.util.List">
+        INSERT INTO t_houses
+        (provider_id, title, detail_page_url, area, aspect, living_dining_kitchen_info, stock_count, main_image_url,
+        city_zone, info_tags, last_update_time, trade_price, trade_price_unit)
+        VALUES
+        <foreach collection="list" item="house" separator=",">
+            (#{house.providerId},
+            #{house.title},
+            #{house.detailPageUrl},
+            #{house.area},
+            #{house.aspect},
+            #{house.livingDiningKitchenInfo},
+            #{house.stockCount},
+            #{house.mainImageUrl},
+            #{house.cityZone},
+            #{house.infoTags},
+            #{house.lastUpdateTime},
+            #{house.tradePrice},
+            #{house.tradePriceUnit})
+        </foreach>
+    </insert>
+    <!-- SQLMapper Batch-Operations Ends -->
+
+
+    <!-- ForeignKey Handler Starts -->
+    <select id="searchTargetHouseByTitleAndURL" resultMap="houseBaseResultMap">
+        select
+        <include refid="House_ListPage_Column_List"/>
+        from t_houses
+        where title=#{houseTitle} and detail_page_url=#{detailPageUrl}
+    </select>
+    <!-- ForeignKey Handler Ends -->
+
+
+    <!-- Handle with data-dependency on record in database Starts  -->
+    <select id="searchHousesByPageURL" resultMap="houseBaseResultMap">
+        select
+        <include refid="House_ListPage_Column_List"/>
+        from t_houses
+        where detail_page_url=#{url}
+    </select>
+    <!-- Handle with data-dependency on record in database Ends  -->
+
+
+    <!-- resultType="String" 返回的是单字段的jsonArray  -->
+    <select id="fetchExistedAddressQualifiedHouseListWithoutGeo" resultMap="houseBaseResultMap">
+        select a.id, a.city_zone, a.geo_info from t_houses a where a.confirm_apartment_type = 2 and LENGTH(city_zone) >
+        5
+    </select>
+
+
+    <select id="fetchExistedAddressQualifiedHouseListWithinGeo" resultMap="houseBaseResultMap">
+        select a.id, a.city_zone, a.trade_price, a.geo_info, a.main_image_url
+        from t_houses a
+        where a.confirm_apartment_type = 2 and LENGTH(city_zone) > 5 and a.geo_info != '0,0';
+    </select>
+
+
+    <!--  Batch Update Operation  -->
+    <update id="batchUpdateHouseGeoInfo" parameterType="java.util.List">
+        <foreach collection="list" item="house" separator=";">
+            update t_houses
+            <set>
+                geo_info=#{house.geoInfo}
+            </set>
+            where id=#{house.id}
+        </foreach>
+    </update>
+
+
+
+    <!-- Paging Data-->
+    <select id="fetchingHousesListPageByPagingCondition" resultMap="houseBaseResultMap">
+        select id, provider_id, title, detail_page_url, area, aspect, living_dining_kitchen_info, stock_count,
+        main_image_url,
+        city_zone, info_tags, last_update_time, trade_price, trade_price_unit, confirm_apartment_type, geo_info
+        from t_houses ${whereConditionSql}
+    </select>
+
+
+    <select id="fetchTotalHousesCountByCondition" resultType="int">
+        select count(*) from t_houses ${whereConditionSql}
+    </select>
+
+
+</mapper>

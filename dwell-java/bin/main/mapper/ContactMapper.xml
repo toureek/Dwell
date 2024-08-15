@@ -1,0 +1,59 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dwell.it.dao.IContactDao">
+
+    <resultMap id="contactResultMap" type="com.dwell.it.entities.Contact">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+        <result column="provider_id" property="providerId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Contact_Full_Column_List">
+        id, avatar, name, title, telephone, provider_id
+    </sql>
+
+
+    <insert id="insertNewContact" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id" parameterType="com.dwell.it.entities.Contact">
+        insert into t_contacts
+        (avatar, name, title, telephone, provider_id)
+        values
+        (#{avatar}, #{name}, #{title}, #{telephone}, #{providerId})
+    </insert>
+
+    <select id="fetchSingleContactById" resultType="com.dwell.it.entities.Contact">
+        select
+        <include refid="Contact_Full_Column_List"/>
+        from t_contacts
+        where id = #{id}
+    </select>
+
+    <update id="updateContact" parameterType="com.dwell.it.entities.Contact">
+        update t_contacts
+        <set>
+            <if test="avatar!=null">avatar=#{avatar},</if>
+            <if test="name!=null">name=#{name},</if>
+            <if test="title!=null">title=#{title},</if>
+            <if test="telephone!=null">telephone=#{telephone},</if>
+            <if test="providerId!=null">provider_id=#{providerId},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="deleteContactById">
+        delete from t_contacts where id = #{id}
+    </delete>
+
+
+    <select id="searchTargetContact" resultType="com.dwell.it.entities.Contact">
+        select
+        <include refid="Contact_Full_Column_List"/>
+        from t_contacts
+        where name=#{name} and telephone=#{telephone} and provider_id=#{providerId}
+    </select>
+
+</mapper>

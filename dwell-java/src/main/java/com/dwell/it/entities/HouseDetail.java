@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=false)
 @Data
 @Table(name = "t_houses")
 public class HouseDetail extends House {
